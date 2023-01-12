@@ -27,6 +27,11 @@ public class RoomEntity {
         this.gameState = gameState;
     }
 
+    public RoomEntity(String code, String gameName, String gameState){
+        this.code = code;
+        this.gameName = gameName;
+        this.gameState = gameState;
+    }
     public RoomEntity() {
     }
 

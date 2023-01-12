@@ -1,8 +1,10 @@
 package com.echochain.EchoChainAPI.controllers;
 
+import com.echochain.EchoChainAPI.Config;
 import com.echochain.EchoChainAPI.data.entities.RoomEntity;
 import com.echochain.EchoChainAPI.models.RoomModel;
 import com.echochain.EchoChainAPI.services.RoomService;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -16,15 +18,18 @@ import java.util.UUID;
 public class RoomController {
 
     @Autowired
+    Config config;
+    @Autowired
     RoomService service;
 
     /**
      * Find all rooms in the database
      * @return List of Rooms
      */
-    @GetMapping("/all")
+    @GetMapping("/")
     public List<RoomModel> getRooms() {
 
+        System.out.println(config);
         List<RoomEntity> rooms = service.findAll();
 
         List<RoomModel> roomModels = new ArrayList<>();
@@ -57,7 +62,7 @@ public class RoomController {
      * @param room - The model used to create a room in the DB
      * @return 1 for a successful post or 0 for unsuccessful
      */
-    @PostMapping("/create")
+    @PostMapping("/")
     public int createRoom(@RequestBody RoomModel room){
 
         System.out.println("we are in create");

@@ -41,7 +41,7 @@ public class RoomService {
 
     public int createRoom(RoomModel roomModel){
 
-        RoomEntity roomEntity = new RoomEntity(roomModel.getId(), roomModel.getCode(),
+        RoomEntity roomEntity = new RoomEntity(roomModel.getCode(),
                 roomModel.getGameName(), roomModel.getGameState());
 
         try{
