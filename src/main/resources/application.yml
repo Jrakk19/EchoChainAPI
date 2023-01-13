@@ -6,3 +6,10 @@ aws:
     user-pool-id: us-east-1_nOCYaX80Q
     app-client-id: barqb611paspe2qnd89jbmk1u
     app-client-secret: 1122r4et2sneumc3vgir9l5l7oog3s5fi604ksmt06g6v2njko4j
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://cognito-idp.us-east-1.amazonaws.com/us-east-1_nOCYaX80Q
