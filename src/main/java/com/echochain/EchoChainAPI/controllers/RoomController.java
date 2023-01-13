@@ -1,12 +1,10 @@
 package com.echochain.EchoChainAPI.controllers;
 
-import com.echochain.EchoChainAPI.Config;
+import com.echochain.EchoChainAPI.configurations.AWSConfig;
 import com.echochain.EchoChainAPI.data.entities.RoomEntity;
 import com.echochain.EchoChainAPI.models.RoomModel;
 import com.echochain.EchoChainAPI.services.RoomService;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -18,7 +16,7 @@ import java.util.UUID;
 public class RoomController {
 
     @Autowired
-    Config config;
+    AWSConfig config;
     @Autowired
     RoomService service;
 
@@ -29,7 +27,7 @@ public class RoomController {
     @GetMapping("/")
     public List<RoomModel> getRooms() {
 
-        System.out.println(config);
+
         List<RoomEntity> rooms = service.findAll();
 
         List<RoomModel> roomModels = new ArrayList<>();
