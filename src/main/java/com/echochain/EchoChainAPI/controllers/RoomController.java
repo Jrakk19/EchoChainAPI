@@ -4,10 +4,12 @@ import com.echochain.EchoChainAPI.configurations.AWSConfig;
 import com.echochain.EchoChainAPI.data.entities.RoomEntity;
 import com.echochain.EchoChainAPI.models.RoomModel;
 import com.echochain.EchoChainAPI.services.RoomService;
+import com.pusher.rest.Pusher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,6 +22,8 @@ public class RoomController {
     @Autowired
     RoomService service;
 
+    Pusher pusher = new Pusher("1538175", "d2348725df402f73b423", "74464c794ccc28926f11");
+
     /**
      * Find all rooms in the database
      * @return List of Rooms
@@ -27,6 +31,9 @@ public class RoomController {
     @GetMapping("/")
     public List<RoomModel> getRooms() {
 
+        pusher.setCluster("us3");
+        pusher.setEncrypted(true);
+        pusher.trigger("my-channel", "my-event", Collections.singletonMap("message", "Hello World"));
 
         List<RoomEntity> rooms = service.findAll();
 
