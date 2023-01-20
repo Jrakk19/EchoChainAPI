@@ -100,7 +100,7 @@ public class CognitoService {
             byte[] rawHmac = mac.doFinal(userPoolClientId.getBytes(StandardCharsets.UTF_8));
             return Base64.getEncoder().encodeToString(rawHmac);
         } catch (Exception e) {
-            throw new ServiceException("Error while calculating ");
+            throw new ServiceException("Error while calculating ", e);
         }
     }
 

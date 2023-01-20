@@ -85,7 +85,12 @@
 			<artifactId>pusher-http-java</artifactId>
 			<version>1.0.0</version>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
+            <version>1.12.388</version>
+        </dependency>
+    </dependencies>
 
 	<build>
 		<plugins>

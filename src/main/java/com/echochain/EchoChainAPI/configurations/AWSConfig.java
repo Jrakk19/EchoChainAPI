@@ -1,6 +1,7 @@
 package com.echochain.EchoChainAPI.configurations;
 
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +15,12 @@ public class AWSConfig {
     private String secretKey;
     private String region;
     private final Cognito cognito = new Cognito();
+
+    private final S3 s3 = new S3();
+
+    public S3 getS3() {
+        return s3;
+    }
 
     public String getSecretKey() {
         return secretKey;
@@ -48,7 +55,17 @@ public class AWSConfig {
     }
 
 
+    public static class S3{
+        public String bucketName;
 
+        public String getBucketName() {
+            return bucketName;
+        }
+
+        public void setBucketName(String bucketName) {
+            this.bucketName = bucketName;
+        }
+    }
     public static class Cognito {
         public String getUserPoolId() {
             return userPoolId;
