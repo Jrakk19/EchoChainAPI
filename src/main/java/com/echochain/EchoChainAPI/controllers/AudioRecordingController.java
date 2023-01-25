@@ -7,11 +7,14 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.util.IOUtils;
+
 import com.echochain.EchoChainAPI.data.entities.AudioRecordingEntity;
 import com.echochain.EchoChainAPI.models.AudioRecordingModel;
 import com.echochain.EchoChainAPI.services.AudioRecordingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +23,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -28,6 +33,7 @@ import com.echochain.EchoChainAPI.configurations.AWSConfig;
 
 @RestController
 @RequestMapping("/recording")
+@CrossOrigin
 public class AudioRecordingController {
 
     @Autowired
@@ -82,11 +88,13 @@ public class AudioRecordingController {
         try{
             AmazonS3 s3Client = AmazonS3ClientBuilder
                     .standard()
-                    .withRegion(awsConfig.getRegion())
+                    .withRegion("us-west-1")
                     .build();
 
-            s3Client.putObject(awsConfig.getS3().getBucketName(), "testing_audio_wav",
+            s3Client.putObject(awsConfig.getS3().getBucketName(), "testing_audio_M4A",
                     audioFile.getInputStream(), new ObjectMetadata());
+
+            System.out.println("Added to the S3");
         }catch(Exception e){
             System.out.println(e);
         }
@@ -96,29 +104,28 @@ public class AudioRecordingController {
     }
 
     @GetMapping
-    public ResponseEntity<ByteArrayResource> getFile() throws IOException {
+    public ResponseEntity<InputStreamResource> getFile() throws IOException {
 
+        System.out.println("We are here");
         try{
             AmazonS3 amazonS3 = AmazonS3ClientBuilder
                     .standard()
-                    .withRegion(awsConfig.getRegion())
+                    .withRegion("us-west-1")
                     .build();
 
             S3Object s3Object= amazonS3.getObject(awsConfig.getS3().getBucketName(), "testing_audio");
 
-            S3ObjectInputStream s3ObjectInputStream= s3Object.getObjectContent();
+            System.out.println(s3Object);
+            InputStream audioStream= s3Object.getObjectContent();
 
-            byte[] bytes = IOUtils.toByteArray(s3ObjectInputStream);
-            ByteArrayResource resource = new ByteArrayResource(bytes);
+            System.out.println(audioStream.toString());
 
-            return ResponseEntity.ok()
-                    .contentLength(s3Object.getObjectMetadata().getContentLength())
-                    .contentType(MediaType.parseMediaType("audio/mpeg"))
-                    .body(resource);
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Content-Disposition", "attachment; filename=" + "testing_audio_M4A");
+
+            return new ResponseEntity<>(new InputStreamResource(audioStream), headers, HttpStatus.OK);
         }catch(AmazonS3Exception e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (IOException e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     /**
