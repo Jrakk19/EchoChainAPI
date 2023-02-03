@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties("aws")
 public class AWSConfig {
 
-    private String accesskey;
+    private String accessKey;
     private String secretKey;
     private String region;
     private final Cognito cognito = new Cognito();
@@ -43,11 +43,11 @@ public class AWSConfig {
     }
 
     public String getAccesskey(){
-        return accesskey;
+        return accessKey;
     }
 
     public void setAccesskey(String accesskey){
-        this.accesskey = accesskey;
+        this.accessKey = accesskey;
     }
     @Override
     public String toString(){
@@ -56,7 +56,7 @@ public class AWSConfig {
 
 
     public static class S3{
-        public String bucketName;
+        private String bucketName;
 
         public String getBucketName() {
             return bucketName;

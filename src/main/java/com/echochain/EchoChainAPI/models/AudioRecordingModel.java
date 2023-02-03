@@ -7,16 +7,29 @@ public class AudioRecordingModel {
     private UUID id;
     private UUID playerId;
     private String s3Key;
-    private String gameIndex;
+    private int gameIndex;
 
-    public AudioRecordingModel(UUID id, UUID playerId, String s3Key, String gameIndex) {
+    private UUID roomId;
+    
+
+
+    public AudioRecordingModel(UUID id, UUID playerId, String s3Key, int gameIndex, UUID roomId) {
         this.id = id;
         this.playerId = playerId;
         this.s3Key = s3Key;
         this.gameIndex = gameIndex;
+        this.roomId = roomId;
     }
 
     public AudioRecordingModel() {
+    }
+
+    public UUID getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(UUID roomId) {
+        this.roomId = roomId;
     }
 
     public UUID getId() {
@@ -43,11 +56,11 @@ public class AudioRecordingModel {
         this.s3Key = s3Key;
     }
 
-    public String getGameIndex() {
+    public int getGameIndex() {
         return gameIndex;
     }
 
-    public void setGameIndex(String gameIndex) {
+    public void setGameIndex(int gameIndex) {
         this.gameIndex = gameIndex;
     }
 }

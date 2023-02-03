@@ -41,14 +41,16 @@ public class AudioRecordingService {
 
     public int createRecordingInS3Bucket(AudioRecordingModel audioRecordingModel) {
 
-        AudioRecordingEntity recordingEntity = new AudioRecordingEntity(audioRecordingModel.getId(), audioRecordingModel.getPlayerId(),
-                audioRecordingModel.getS3Key(), audioRecordingModel.getGameIndex());
+        AudioRecordingEntity recordingEntity = new AudioRecordingEntity(audioRecordingModel.getPlayerId(),
+                audioRecordingModel.getS3Key(), audioRecordingModel.getGameIndex(), audioRecordingModel.getRoomId());
 
         try{
             audioRecordingRepository.save(recordingEntity);
 
             return 1;
         }catch(Exception e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
             return 0;
         }
     }
@@ -64,7 +66,7 @@ public class AudioRecordingService {
 
     public AudioRecordingEntity updateAudioRecording(AudioRecordingModel recordingModel){
 
-        AudioRecordingEntity recordingEntity = new AudioRecordingEntity(recordingModel.getId(), recordingModel.getPlayerId(), recordingModel.getS3Key(), recordingModel.getGameIndex());
+        AudioRecordingEntity recordingEntity = new AudioRecordingEntity(recordingModel.getId(), recordingModel.getPlayerId(), recordingModel.getS3Key(), recordingModel.getGameIndex(), recordingModel.getRoomId());
 
         return audioRecordingRepository.save(recordingEntity);
     }

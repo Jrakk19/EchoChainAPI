@@ -54,7 +54,7 @@ public class AudioRecordingController {
 
         recordings.forEach(recordingEntity -> {
             recordModels.add(new AudioRecordingModel(recordingEntity.getId(), recordingEntity.getPlayerId(),
-                    recordingEntity.getS3Key(), recordingEntity.getGameIndex()));
+                    recordingEntity.getS3Key(), recordingEntity.getGameIndex(), recordingEntity.getRoomId()));
         });
 
         return recordModels;
@@ -70,7 +70,7 @@ public class AudioRecordingController {
         AudioRecordingEntity recordingEntity = service.findById(id);
 
         AudioRecordingModel recordingModel = new AudioRecordingModel(recordingEntity.getId(), recordingEntity.getPlayerId(),
-                recordingEntity.getS3Key(), recordingEntity.getGameIndex());
+                recordingEntity.getS3Key(), recordingEntity.getGameIndex(), recordingEntity.getRoomId());
 
         return recordingModel;
     }
@@ -81,10 +81,30 @@ public class AudioRecordingController {
      * @return 1 for a successful post oro 0 for unsuccessful
      */
     @PostMapping("")
-    public int createRoom(@RequestParam("file")MultipartFile audioFile) throws IOException {
+    public int uploadFile(@RequestParam("file")MultipartFile audioFile,
+                          @RequestParam("player_id") UUID player_id,
+                          @RequestParam("gameIndex") int gameIndex,
+                          @RequestParam("s3Key") String s3Key,
+                          @RequestParam("roomId") UUID roomId)  throws IOException {
+
+        System.out.println(player_id);
+        System.out.println(gameIndex);
+        System.out.println(s3Key);
+
+        AudioRecordingModel audioModel = new AudioRecordingModel(UUID.randomUUID(), player_id, s3Key, gameIndex, roomId);
+
+        System.out.println(audioModel.getId());
+
+        try{
+            service.createRecordingInS3Bucket(audioModel);
+        }catch(Exception e){
+            System.out.println(e.getStackTrace());
+        }
         System.out.println(audioFile.getOriginalFilename());
         System.out.println(awsConfig.getS3().getBucketName());
-
+        //Upload a tracking object to DB to Audio Recordings.
+        //Use the ID of that object as the file name.
+        //add user_id to API params,
         try{
             AmazonS3 s3Client = AmazonS3ClientBuilder
                     .standard()
@@ -150,7 +170,7 @@ public class AudioRecordingController {
         AudioRecordingEntity recordingEntity = service.updateAudioRecording(recordingModel);
 
         AudioRecordingModel audioModel = new AudioRecordingModel(recordingEntity.getId(), recordingEntity.getPlayerId(),
-                recordingEntity.getS3Key(), recordingEntity.getGameIndex());
+                recordingEntity.getS3Key(), recordingEntity.getGameIndex(), recordingEntity.getRoomId());
 
         return audioModel;
     }
