@@ -6,14 +6,14 @@ public class AudioRecordingModel {
 
     private UUID id;
     private UUID playerId;
-    private String s3Key;
+    private UUID s3Key;
     private int gameIndex;
 
     private UUID roomId;
     
 
 
-    public AudioRecordingModel(UUID id, UUID playerId, String s3Key, int gameIndex, UUID roomId) {
+    public AudioRecordingModel(UUID id, UUID playerId, UUID s3Key, int gameIndex, UUID roomId) {
         this.id = id;
         this.playerId = playerId;
         this.s3Key = s3Key;
@@ -48,11 +48,11 @@ public class AudioRecordingModel {
         this.playerId = playerId;
     }
 
-    public String getS3Key() {
+    public UUID getS3Key() {
         return s3Key;
     }
 
-    public void setS3Key(String s3Key) {
+    public void setS3Key(UUID s3Key) {
         this.s3Key = s3Key;
     }
 

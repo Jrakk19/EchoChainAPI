@@ -82,16 +82,14 @@ public class AudioRecordingController {
      */
     @PostMapping("")
     public int uploadFile(@RequestParam("file")MultipartFile audioFile,
-                          @RequestParam("player_id") UUID player_id,
+                          @RequestParam("playerId") UUID player_id,
                           @RequestParam("gameIndex") int gameIndex,
-                          @RequestParam("s3Key") String s3Key,
                           @RequestParam("roomId") UUID roomId)  throws IOException {
 
         System.out.println(player_id);
         System.out.println(gameIndex);
-        System.out.println(s3Key);
-
-        AudioRecordingModel audioModel = new AudioRecordingModel(UUID.randomUUID(), player_id, s3Key, gameIndex, roomId);
+        UUID newS3Key = UUID.randomUUID();
+        AudioRecordingModel audioModel = new AudioRecordingModel(UUID.randomUUID(), player_id, newS3Key, gameIndex, roomId);
 
         System.out.println(audioModel.getId());
 
@@ -111,7 +109,7 @@ public class AudioRecordingController {
                     .withRegion("us-west-1")
                     .build();
 
-            s3Client.putObject(awsConfig.getS3().getBucketName(), "testing_audio_M4A",
+            s3Client.putObject(awsConfig.getS3().getBucketName(), newS3Key.toString(),
                     audioFile.getInputStream(), new ObjectMetadata());
 
             System.out.println("Added to the S3");
@@ -124,16 +122,18 @@ public class AudioRecordingController {
     }
 
     @GetMapping
-    public ResponseEntity<InputStreamResource> getFile() throws IOException {
+    public ResponseEntity<InputStreamResource> getFile(@RequestParam UUID audioId) throws IOException {
 
-        System.out.println("We are here");
+        AudioRecordingEntity audioModel = service.findById(audioId);
+
+        System.out.println("We are here" + audioModel.getS3Key());
         try{
             AmazonS3 amazonS3 = AmazonS3ClientBuilder
                     .standard()
                     .withRegion("us-west-1")
                     .build();
 
-            S3Object s3Object= amazonS3.getObject(awsConfig.getS3().getBucketName(), "testing_audio");
+            S3Object s3Object= amazonS3.getObject(awsConfig.getS3().getBucketName(), audioModel.getS3Key().toString());
 
             System.out.println(s3Object);
             InputStream audioStream= s3Object.getObjectContent();

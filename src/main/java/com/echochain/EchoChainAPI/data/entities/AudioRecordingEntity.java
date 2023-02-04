@@ -16,7 +16,7 @@ public class AudioRecordingEntity {
     private UUID playerId;
 
     @Column("s3_key")
-    private String s3Key;
+    private UUID s3Key;
 
     @Column("game_index")
     private int gameIndex;
@@ -25,7 +25,7 @@ public class AudioRecordingEntity {
     private UUID roomId;
 
 
-    public AudioRecordingEntity(UUID id, UUID playerId, String s3Key, int gameIndex, UUID roomId) {
+    public AudioRecordingEntity(UUID id, UUID playerId, UUID s3Key, int gameIndex, UUID roomId) {
         this.id = id;
         this.playerId = playerId;
         this.s3Key = s3Key;
@@ -33,7 +33,7 @@ public class AudioRecordingEntity {
         this.roomId = roomId;
     }
 
-    public AudioRecordingEntity(UUID playerId, String s3Key, int gameIndex, UUID roomId) {
+    public AudioRecordingEntity(UUID playerId, UUID s3Key, int gameIndex, UUID roomId) {
         this.playerId = playerId;
         this.s3Key = s3Key;
         this.gameIndex = gameIndex;
@@ -66,11 +66,11 @@ public class AudioRecordingEntity {
         this.playerId = playerId;
     }
 
-    public String getS3Key() {
+    public UUID getS3Key() {
         return s3Key;
     }
 
-    public void setS3Key(String s3Key) {
+    public void setS3Key(UUID s3Key) {
         this.s3Key = s3Key;
     }
 
