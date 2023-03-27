@@ -9,15 +9,25 @@ public class PlayerModel {
     private int points;
     private String avatarUrl;
 
-    public PlayerModel(UUID id, UUID gameId, String displayName, int points, String avatarUrl) {
+    private int playerNumber;
+    public PlayerModel(UUID id, UUID gameId, String displayName, int points, String avatarUrl, int playerNumber) {
         this.id = id;
         this.gameId = gameId;
         this.displayName = displayName;
         this.points = points;
         this.avatarUrl = avatarUrl;
+        this.playerNumber = playerNumber;
     }
 
     public PlayerModel() {
+    }
+
+    public int getPlayerNumber() {
+        return playerNumber;
+    }
+
+    public void setPlayerNumber(int playerNumber) {
+        this.playerNumber = playerNumber;
     }
 
     public UUID getId() {

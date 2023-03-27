@@ -7,10 +7,16 @@ public class RoomModel {
     private UUID id;
     private String code;
     private String gameName;
-    private String gameState;
+    private int gameState;
 
-    public RoomModel(UUID id, String code, String gameName, String gameState) {
+    public RoomModel(UUID id, String code, String gameName, int gameState) {
         this.id = id;
+        this.code = code;
+        this.gameName = gameName;
+        this.gameState = gameState;
+    }
+
+    public RoomModel(String code, String gameName, int gameState) {
         this.code = code;
         this.gameName = gameName;
         this.gameState = gameState;
@@ -43,11 +49,11 @@ public class RoomModel {
         this.gameName = gameName;
     }
 
-    public String getGameState() {
+    public int getGameState() {
         return gameState;
     }
 
-    public void setGameState(String gameState) {
+    public void setGameState(int gameState) {
         this.gameState = gameState;
     }
 

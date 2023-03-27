@@ -65,7 +65,7 @@ public class AudioRecordingController {
      * @param id - UUID of the recording you are looking for
      * @return - Audio Recording Model found by its Id
      */
-    @GetMapping("/{id}")
+
     public AudioRecordingModel findRecordingById(@PathVariable UUID id){
         AudioRecordingEntity recordingEntity = service.findById(id);
 
@@ -91,7 +91,7 @@ public class AudioRecordingController {
         UUID newS3Key = UUID.randomUUID();
         AudioRecordingModel audioModel = new AudioRecordingModel(UUID.randomUUID(), player_id, newS3Key, gameIndex, roomId);
 
-        System.out.println(audioModel.getId());
+        System.out.println(audioModel.getS3Key());
 
         try{
             service.createRecordingInS3Bucket(audioModel);
@@ -121,8 +121,8 @@ public class AudioRecordingController {
         //return service.createRecordingInS3Bucket(recording);
     }
 
-    @GetMapping
-    public ResponseEntity<InputStreamResource> getFile(@RequestParam UUID audioId) throws IOException {
+    @GetMapping("/{id}")
+    public ResponseEntity<InputStreamResource> getAudioFile(@PathVariable("id") UUID audioId) throws IOException {
 
         AudioRecordingEntity audioModel = service.findById(audioId);
 
@@ -136,14 +136,14 @@ public class AudioRecordingController {
             S3Object s3Object= amazonS3.getObject(awsConfig.getS3().getBucketName(), audioModel.getS3Key().toString());
 
             System.out.println(s3Object);
-            InputStream audioStream= s3Object.getObjectContent();
+            InputStream audioStream = s3Object.getObjectContent();
 
             System.out.println(audioStream.toString());
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Content-Disposition", "attachment; filename=" + "testing_audio_M4A");
+            //HttpHeaders headers = new HttpHeaders();
+            //headers.add("Content-Disposition", "attachment; filename=" + "testing_audio_M4A");
 
-            return new ResponseEntity<>(new InputStreamResource(audioStream), headers, HttpStatus.OK);
+            return new ResponseEntity<>(new InputStreamResource(audioStream), HttpStatus.OK);
         }catch(AmazonS3Exception e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

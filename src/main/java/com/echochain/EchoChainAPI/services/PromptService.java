@@ -3,6 +3,7 @@ package com.echochain.EchoChainAPI.services;
 import com.echochain.EchoChainAPI.data.entities.PlayerEntity;
 import com.echochain.EchoChainAPI.data.entities.PromptEntity;
 import com.echochain.EchoChainAPI.data.repository.PromptRepository;
+import com.echochain.EchoChainAPI.models.PromptModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,5 +25,16 @@ public class PromptService {
         promptEntities.forEach(prompts::add);
 
         return prompts;
+    }
+
+    public void create(PromptModel prompt){
+
+        try{
+            PromptEntity promptEntity = new PromptEntity(prompt.getTitle(), prompt.getRoomId(), prompt.getGameIndex());
+            promptRepository.save(promptEntity);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
     }
 }

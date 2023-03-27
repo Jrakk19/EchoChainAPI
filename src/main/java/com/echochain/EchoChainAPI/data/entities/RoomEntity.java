@@ -18,16 +18,16 @@ public class RoomEntity {
     private String gameName;
 
     @Column("state")
-    private String gameState;
+    private int gameState;
 
-    public RoomEntity(UUID id, String code, String gameName, String gameState) {
+    public RoomEntity(UUID id, String code, String gameName, int gameState) {
         this.id = id;
         this.code = code;
         this.gameName = gameName;
         this.gameState = gameState;
     }
 
-    public RoomEntity(String code, String gameName, String gameState){
+    public RoomEntity(String code, String gameName, int gameState){
         this.code = code;
         this.gameName = gameName;
         this.gameState = gameState;
@@ -59,11 +59,11 @@ public class RoomEntity {
         this.gameName = gameName;
     }
 
-    public String getGameState() {
+    public int getGameState() {
         return gameState;
     }
 
-    public void setGameState(String gameState) {
+    public void setGameState(int gameState) {
         this.gameState = gameState;
     }
 

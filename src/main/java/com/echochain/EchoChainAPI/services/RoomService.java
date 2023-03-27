@@ -1,21 +1,23 @@
 package com.echochain.EchoChainAPI.services;
 
+import com.echochain.EchoChainAPI.data.entities.PlayerEntity;
 import com.echochain.EchoChainAPI.data.entities.RoomEntity;
+import com.echochain.EchoChainAPI.data.repository.PlayerRepository;
 import com.echochain.EchoChainAPI.data.repository.RoomRepository;
 import com.echochain.EchoChainAPI.models.RoomModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class RoomService {
 
     @Autowired
     private RoomRepository roomRepository;
+
+    @Autowired
+    private PlayerRepository playerRepository;
 
     public List<RoomEntity> findAll(){
 
@@ -39,20 +41,38 @@ public class RoomService {
         }
     }
 
-    public int createRoom(RoomModel roomModel){
+    public RoomEntity createRoom(RoomModel roomModel){
 
         RoomEntity roomEntity = new RoomEntity(roomModel.getCode(),
                 roomModel.getGameName(), roomModel.getGameState());
 
         try{
             roomRepository.save(roomEntity);
-            return 1;
+            return roomRepository.findByRoomId(roomEntity.getCode());
         }catch(Exception e){
             e.printStackTrace();
-            return 0;
+            return null;
         }
     }
+    public RoomEntity findByRoomCode(String roomCode){
+        return roomRepository.findByRoomId(roomCode);
+    }
+    public void initializeGame(UUID roomId){
 
+        try{
+            List<PlayerEntity> players = playerRepository.findPlayersInRoom(roomId);
+
+            List<PlayerEntity> updatedPlayers = assignPlayerNumbers(players);
+
+            updatedPlayers.forEach(playerEntity -> {
+                playerRepository.save(playerEntity);
+            });
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+
+    }
     public int deleteRoom(UUID id){
 
         try{
@@ -69,5 +89,26 @@ public class RoomService {
                 roomModel.getGameName(), roomModel.getGameState());
 
         return roomRepository.save(roomEntity);
+    }
+
+    private List<PlayerEntity> assignPlayerNumbers(List<PlayerEntity> players){
+        int size = players.size();
+        List<Integer> numbers = new ArrayList<>();
+        Set<Integer> usedNumbers = new HashSet<>();
+
+        for (int i = 0; i < size; i++) {
+            int num;
+            do {
+                num = (int) (Math.random() * size);
+            } while (usedNumbers.contains(num));
+            usedNumbers.add(num);
+            numbers.add(num);
+        }
+
+        for (int i = 0; i < size; i++) {
+            players.get(i).setPlayerNumber(numbers.get(i));
+        }
+
+        return players;
     }
 }

@@ -13,7 +13,7 @@ public class PlayerEntity {
     @Id
     private UUID id;
 
-    @Column("game_id")
+    @Column("room_id")
     private UUID gameId;
 
     @Column("display_name")
@@ -25,13 +25,32 @@ public class PlayerEntity {
     @Column("avatar")
     private String avatarUrl;
 
+    @Column("player_number")
+    private int playerNumber;
 
-    public PlayerEntity(UUID id, UUID gameId, String displayName, int points, String avatarUrl) {
+
+    public PlayerEntity(UUID gameId, String displayName, int points, String avatarUrl, int playerNumber) {
+        this.gameId = gameId;
+        this.displayName = displayName;
+        this.points = points;
+        this.avatarUrl = avatarUrl;
+        this.playerNumber = playerNumber;
+    }
+    public PlayerEntity(UUID id, UUID gameId, String displayName, int points, String avatarUrl, int playerNumber) {
         this.id = id;
         this.gameId = gameId;
         this.displayName = displayName;
         this.points = points;
         this.avatarUrl = avatarUrl;
+        this.playerNumber = playerNumber;
+    }
+
+    public int getPlayerNumber() {
+        return playerNumber;
+    }
+
+    public void setPlayerNumber(int playerNumber) {
+        this.playerNumber = playerNumber;
     }
 
     public PlayerEntity() {

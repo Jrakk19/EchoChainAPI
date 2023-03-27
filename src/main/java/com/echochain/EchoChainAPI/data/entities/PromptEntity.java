@@ -1,5 +1,6 @@
 package com.echochain.EchoChainAPI.data.entities;
 
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
@@ -14,12 +15,41 @@ public class PromptEntity {
     @Column("title")
     private String title;
 
-    public PromptEntity(UUID id, String title) {
+    @Column("room_id")
+    private UUID roomId;
+
+    @Column("game_stage")
+    private int gameIndex;
+    public PromptEntity(UUID id, String title, UUID roomId, int gameIndex) {
         this.id = id;
         this.title = title;
+        this.roomId = roomId;
+        this.gameIndex = gameIndex;
+    }
+
+    public PromptEntity(String title, UUID roomId, int gameIndex) {
+        this.title = title;
+        this.roomId = roomId;
+        this.gameIndex = gameIndex;
     }
 
     public PromptEntity() {
+    }
+
+    public UUID getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(UUID roomId) {
+        this.roomId = roomId;
+    }
+
+    public int getGameIndex() {
+        return gameIndex;
+    }
+
+    public void setGameIndex(int gameIndex) {
+        this.gameIndex = gameIndex;
     }
 
     public UUID getId() {

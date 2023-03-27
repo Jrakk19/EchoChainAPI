@@ -1,15 +1,15 @@
 package com.echochain.EchoChainAPI.controllers;
 
+import com.echochain.EchoChainAPI.data.DTO.CreatePlayerRequest;
 import com.echochain.EchoChainAPI.data.entities.PlayerEntity;
 import com.echochain.EchoChainAPI.models.PlayerModel;
 import com.echochain.EchoChainAPI.services.PlayerService;
+import com.pusher.rest.Pusher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/player")
@@ -17,6 +17,9 @@ public class PlayerController {
 
     @Autowired
     PlayerService service;
+
+    Pusher pusher = new Pusher("1538175", "d2348725df402f73b423", "74464c794ccc28926f11");
+
 
     /**
      * Get all Players in the DB
@@ -31,7 +34,7 @@ public class PlayerController {
 
         playerEntities.forEach(playerEntity -> {
             playerModels.add(new PlayerModel(playerEntity.getId(), playerEntity.getGameId(), playerEntity.getDisplayName(),
-                    playerEntity.getPoints(), playerEntity.getAvatarUrl()));
+                    playerEntity.getPoints(), playerEntity.getAvatarUrl(), playerEntity.getPlayerNumber()));
         });
 
         return playerModels;
@@ -48,8 +51,9 @@ public class PlayerController {
         PlayerEntity playerEntity = service.findById(id);
 
         PlayerModel playerModel = new PlayerModel(playerEntity.getId(), playerEntity.getGameId(),
-                playerEntity.getDisplayName(), playerEntity.getPoints(), playerEntity.getAvatarUrl());
+                playerEntity.getDisplayName(), playerEntity.getPoints(), playerEntity.getAvatarUrl(), playerEntity.getPlayerNumber());
 
+        System.out.println("THIS IS THE PLAYER MODEL" + playerModel);
         return playerModel;
     }
 
@@ -59,8 +63,14 @@ public class PlayerController {
      * @return - returns a 1 if successful and a 0 if unsuccessful
      */
     @PostMapping("/create")
-    public int createPlayer(@RequestBody PlayerModel player){
-        return service.createPlayer(player);
+    public PlayerEntity createPlayer(@RequestBody CreatePlayerRequest request){
+
+        System.out.println(request.getRoomCode().toString());
+        pusher.setCluster("us3");
+        pusher.setEncrypted(true);
+        pusher.trigger(request.getRoomCode().toString(), "player-joined", Collections.singletonMap("message", "Hello World"));
+
+        return service.createPlayer(request.getDisplayName(), request.getRoomCode());
     }
 
     /**
@@ -85,7 +95,7 @@ public class PlayerController {
         PlayerEntity playerEntity = service.updatePlayerInfo(playerModel);
 
         PlayerModel newPlayerModel = new PlayerModel(playerEntity.getId(), playerEntity.getGameId(),
-                playerEntity.getDisplayName(), playerEntity.getPoints(), playerEntity.getAvatarUrl());
+                playerEntity.getDisplayName(), playerEntity.getPoints(), playerEntity.getAvatarUrl(), playerEntity.getPlayerNumber());
 
         return newPlayerModel;
     }

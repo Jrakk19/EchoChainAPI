@@ -1,13 +1,17 @@
 package com.echochain.EchoChainAPI.controllers;
 
 import com.echochain.EchoChainAPI.configurations.AWSConfig;
+import com.echochain.EchoChainAPI.data.entities.PlayerEntity;
 import com.echochain.EchoChainAPI.data.entities.RoomEntity;
+import com.echochain.EchoChainAPI.models.PlayerModel;
 import com.echochain.EchoChainAPI.models.RoomModel;
+import com.echochain.EchoChainAPI.services.PlayerService;
 import com.echochain.EchoChainAPI.services.RoomService;
 import com.pusher.rest.Pusher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Random;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -22,7 +26,11 @@ public class RoomController {
     @Autowired
     RoomService service;
 
+    @Autowired
+    PlayerService playerService;
+
     Pusher pusher = new Pusher("1538175", "d2348725df402f73b423", "74464c794ccc28926f11");
+
 
     /**
      * Find all rooms in the database
@@ -30,10 +38,6 @@ public class RoomController {
      */
     @GetMapping("/")
     public List<RoomModel> getRooms() {
-
-        pusher.setCluster("us3");
-        pusher.setEncrypted(true);
-        pusher.trigger("my-channel", "my-event", Collections.singletonMap("message", "Hello World"));
 
         List<RoomEntity> rooms = service.findAll();
 
@@ -64,15 +68,14 @@ public class RoomController {
 
     /**
      * Create a Room
-     * @param room - The model used to create a room in the DB
      * @return 1 for a successful post or 0 for unsuccessful
      */
     @PostMapping("/")
-    public int createRoom(@RequestBody RoomModel room){
+    public RoomEntity createRoom(){
 
+        RoomModel newRoom = new RoomModel(generateRoomCode(), "EchoChainGame", 0);
         System.out.println("we are in create");
-        System.out.println(room.toString());
-        return service.createRoom(room);
+        return service.createRoom(newRoom);
     }
 
     /**
@@ -100,5 +103,40 @@ public class RoomController {
                 roomEntity.getGameName(), roomEntity.getGameState());
 
         return roomModel;
+    }
+
+    @GetMapping("/players/{roomId}")
+    public List<PlayerEntity> findPlayersInGame(@PathVariable UUID roomId){
+        return playerService.findPlayersInRoom(roomId);
+
+    }
+
+    @PostMapping("/game/initialize/{roomId}")
+    public void initializeGame(@PathVariable UUID roomId){
+
+        RoomEntity room = service.findById(roomId);
+
+
+        pusher.setCluster("us3");
+        pusher.setEncrypted(true);
+        pusher.trigger(room.getCode().toString(), "start-game", Collections.singletonMap("message", "Hello World"));
+
+        service.initializeGame(roomId);
+    }
+
+    @GetMapping("/code/{roomCode}")
+    public RoomEntity getRoomByRoomCode(@PathVariable String roomCode){
+        System.out.println("IN GET ROOM" + roomCode);
+        return service.findByRoomCode(roomCode);
+    }
+    private String generateRoomCode(){
+        final String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        Random rng = new Random();
+        char[] text = new char[4];
+        for (int i = 0; i < 4; i++) {
+            text[i] = characters.charAt(rng.nextInt(characters.length()));
+        }
+        return new String(text);
+
     }
 }

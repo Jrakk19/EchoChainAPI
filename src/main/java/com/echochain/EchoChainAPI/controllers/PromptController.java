@@ -1,13 +1,12 @@
 package com.echochain.EchoChainAPI.controllers;
 
+import com.echochain.EchoChainAPI.data.DTO.CreatePromptRequest;
 import com.echochain.EchoChainAPI.data.entities.PromptEntity;
 import com.echochain.EchoChainAPI.models.PromptModel;
 import com.echochain.EchoChainAPI.services.PromptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,10 +29,17 @@ public class PromptController {
         List<PromptModel> promptModels = new ArrayList<>();
 
         promptEntityList.forEach(prompt -> {
-            promptModels.add(new PromptModel(prompt.getId(), prompt.getTitle()));
+            promptModels.add(new PromptModel(prompt.getId(), prompt.getTitle(), prompt.getRoomId(), prompt.getGameIndex()));
         });
 
         return promptModels;
+    }
+
+    @PostMapping("/original-prompt")
+    public void postOriginalPrompt(@RequestBody CreatePromptRequest prompt){
+        System.out.println("PLEEEEEEASE");
+
+        service.create(prompt.requestToModel(prompt));
     }
 
 }
