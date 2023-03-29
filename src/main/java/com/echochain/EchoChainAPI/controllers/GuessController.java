@@ -28,7 +28,7 @@ public class GuessController {
         GuessEntity guessEntity = service.findById(id);
 
         GuessModel guessModel = new GuessModel(guessEntity.getId(), guessEntity.getGameId(),
-                guessEntity.getRoomId(), guessEntity.getGameIndex());
+                guessEntity.getRoomId(), guessEntity.getGameIndex(), guessEntity.getChainId());
 
         return guessModel;
     }

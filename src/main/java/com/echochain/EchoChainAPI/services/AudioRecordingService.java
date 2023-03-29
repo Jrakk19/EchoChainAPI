@@ -1,8 +1,13 @@
 package com.echochain.EchoChainAPI.services;
 
 import com.echochain.EchoChainAPI.data.entities.AudioRecordingEntity;
+import com.echochain.EchoChainAPI.data.entities.PlayerEntity;
+import com.echochain.EchoChainAPI.data.entities.RoomEntity;
 import com.echochain.EchoChainAPI.data.repository.AudioRecordingRepository;
+import com.echochain.EchoChainAPI.data.repository.PlayerRepository;
+import com.echochain.EchoChainAPI.data.repository.RoomRepository;
 import com.echochain.EchoChainAPI.models.AudioRecordingModel;
+import com.echochain.EchoChainAPI.models.PlayerModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +21,9 @@ public class AudioRecordingService {
 
     @Autowired
     private AudioRecordingRepository audioRecordingRepository;
+
+    @Autowired
+    private PlayerRepository playerRepository;
 
     public List<AudioRecordingEntity> findAll() {
 
@@ -66,8 +74,27 @@ public class AudioRecordingService {
 
     public AudioRecordingEntity updateAudioRecording(AudioRecordingModel recordingModel){
 
-        AudioRecordingEntity recordingEntity = new AudioRecordingEntity(recordingModel.getId(), recordingModel.getPlayerId(), recordingModel.getS3Key(), recordingModel.getGameIndex(), recordingModel.getRoomId());
+        AudioRecordingEntity recordingEntity = new AudioRecordingEntity(recordingModel.getId(), recordingModel.getPlayerId(), recordingModel.getS3Key(), recordingModel.getGameIndex(), recordingModel.getRoomId(), recordingModel.getChainId());
 
         return audioRecordingRepository.save(recordingEntity);
+    }
+
+    public UUID findNextAudio(int gameIndex, PlayerModel player){
+
+        int playerCount = playerRepository.countPlayersInRoom(player.getGameId());
+
+        int nextPlayerNumber = (player.getPlayerNumber() - 1 + playerCount) % playerCount;
+
+        UUID targetPlayer = playerRepository.findPlayerByPlayerNumber(player.getGameId(), nextPlayerNumber);
+
+
+        try{
+            AudioRecordingEntity audioRecordingEntity = audioRecordingRepository.findNextAudio(gameIndex,targetPlayer );
+
+            return audioRecordingEntity.getS3Key();
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 }

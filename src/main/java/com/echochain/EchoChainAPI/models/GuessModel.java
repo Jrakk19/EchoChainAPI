@@ -9,14 +9,25 @@ public class GuessModel {
     private UUID roomId;
     private int gameIndex;
 
-    public GuessModel(UUID id, UUID gameId, UUID roomId, int gameIndex) {
+    private UUID chainId;
+
+    public GuessModel(UUID id, UUID gameId, UUID roomId, int gameIndex, UUID chainId) {
         this.id = id;
         this.gameId = gameId;
         this.roomId = roomId;
         this.gameIndex = gameIndex;
+        this.chainId = chainId;
     }
 
     public GuessModel() {
+    }
+
+    public UUID getChainId() {
+        return chainId;
+    }
+
+    public void setChainId(UUID chainId) {
+        this.chainId = chainId;
     }
 
     public UUID getId() {

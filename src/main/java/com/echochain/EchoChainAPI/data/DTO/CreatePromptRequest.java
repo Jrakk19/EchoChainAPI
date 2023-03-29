@@ -40,8 +40,8 @@ public class CreatePromptRequest {
         this.gameIndex = gameIndex;
     }
 
-    public PromptModel requestToModel(CreatePromptRequest prompt){
-        PromptModel promptModel = new PromptModel(prompt.getTitle(), prompt.getRoomId(), prompt.getGameIndex());
+    public PromptModel requestToModel(CreatePromptRequest prompt, UUID chainId){
+        PromptModel promptModel = new PromptModel(prompt.getTitle(), prompt.getRoomId(), prompt.getGameIndex(), chainId);
         return promptModel;
     }
 }

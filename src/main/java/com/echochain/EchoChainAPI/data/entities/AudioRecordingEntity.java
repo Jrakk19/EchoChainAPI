@@ -24,13 +24,17 @@ public class AudioRecordingEntity {
     @Column("room_id")
     private UUID roomId;
 
+    @Column("chain_id")
+    private UUID chainId;
 
-    public AudioRecordingEntity(UUID id, UUID playerId, UUID s3Key, int gameIndex, UUID roomId) {
+
+    public AudioRecordingEntity(UUID id, UUID playerId, UUID s3Key, int gameIndex, UUID roomId, UUID chainId) {
         this.id = id;
         this.playerId = playerId;
         this.s3Key = s3Key;
         this.gameIndex = gameIndex;
         this.roomId = roomId;
+        this.chainId = chainId;
     }
 
     public AudioRecordingEntity(UUID playerId, UUID s3Key, int gameIndex, UUID roomId) {
@@ -38,9 +42,18 @@ public class AudioRecordingEntity {
         this.s3Key = s3Key;
         this.gameIndex = gameIndex;
         this.roomId = roomId;
+        this.chainId = chainId;
     }
 
     public AudioRecordingEntity() {
+    }
+
+    public UUID getChainId() {
+        return chainId;
+    }
+
+    public void setChainId(UUID chainId) {
+        this.chainId = chainId;
     }
 
     public UUID getRoomId() {

@@ -70,6 +70,7 @@ public class PlayerController {
         pusher.setEncrypted(true);
         pusher.trigger(request.getRoomCode().toString(), "player-joined", Collections.singletonMap("message", "Hello World"));
 
+
         return service.createPlayer(request.getDisplayName(), request.getRoomCode());
     }
 

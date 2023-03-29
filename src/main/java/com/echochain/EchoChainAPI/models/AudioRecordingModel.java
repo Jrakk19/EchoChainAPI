@@ -10,18 +10,30 @@ public class AudioRecordingModel {
     private int gameIndex;
 
     private UUID roomId;
+
+    private UUID chainId;
     
 
 
-    public AudioRecordingModel(UUID id, UUID playerId, UUID s3Key, int gameIndex, UUID roomId) {
+    public AudioRecordingModel(UUID id, UUID playerId, UUID s3Key, int gameIndex, UUID roomId, UUID chainId) {
         this.id = id;
         this.playerId = playerId;
         this.s3Key = s3Key;
         this.gameIndex = gameIndex;
         this.roomId = roomId;
+        this.chainId = chainId;
+
     }
 
     public AudioRecordingModel() {
+    }
+
+    public UUID getChainId() {
+        return chainId;
+    }
+
+    public void setChainId(UUID chainId) {
+        this.chainId = chainId;
     }
 
     public UUID getRoomId() {

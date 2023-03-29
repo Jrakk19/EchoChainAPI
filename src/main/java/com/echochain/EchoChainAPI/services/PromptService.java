@@ -30,7 +30,7 @@ public class PromptService {
     public void create(PromptModel prompt){
 
         try{
-            PromptEntity promptEntity = new PromptEntity(prompt.getTitle(), prompt.getRoomId(), prompt.getGameIndex());
+            PromptEntity promptEntity = new PromptEntity(prompt.getTitle(), prompt.getRoomId(), prompt.getGameIndex(), prompt.getChainId());
             promptRepository.save(promptEntity);
         }catch(Exception e){
             e.printStackTrace();

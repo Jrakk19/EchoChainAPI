@@ -29,7 +29,7 @@ public class GuessService {
     public int makeGuess(GuessModel guessModel){
 
         GuessEntity guessEntity = new GuessEntity(guessModel.getId(), guessModel.getGameId(),
-                guessModel.getRoomId(), guessModel.getGameIndex());
+                guessModel.getRoomId(), guessModel.getGameIndex(), guessModel.getChainId());
     try{
         guessRepository.save(guessEntity);
         return 1;

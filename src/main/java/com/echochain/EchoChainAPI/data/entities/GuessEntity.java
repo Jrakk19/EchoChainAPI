@@ -24,14 +24,26 @@ public class GuessEntity {
     @Column("game_index")
     private int gameIndex;
 
-    public GuessEntity(UUID id, UUID gameId, UUID roomId, int gameIndex) {
+    @Column("chain_id")
+    private UUID chainId;
+
+    public GuessEntity(UUID id, UUID gameId, UUID roomId, int gameIndex, UUID chainId) {
         this.id = id;
         this.gameId = gameId;
         this.roomId = roomId;
         this.gameIndex = gameIndex;
+        this.chainId = chainId;
     }
 
     public GuessEntity() {
+    }
+
+    public UUID getChainId() {
+        return chainId;
+    }
+
+    public void setChainId(UUID chainId) {
+        this.chainId = chainId;
     }
 
     public UUID getId() {

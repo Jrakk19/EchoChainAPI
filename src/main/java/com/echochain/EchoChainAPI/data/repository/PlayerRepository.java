@@ -14,5 +14,10 @@ public interface PlayerRepository extends CrudRepository<PlayerEntity, UUID> {
 
     @Query("SELECT * FROM players where players.room_id = :roomId")
     List<PlayerEntity> findPlayersInRoom(@Param("roomId") UUID roomId);
+    @Query("Select COUNT(*) FROM players WHERE players.room_id = :roomId")
+    int countPlayersInRoom(@Param("roomId") UUID roomId);
+
+    @Query("SELECT id FROM players where players.room_id = :roomId AND players.player_number = :playerNumber")
+    UUID findPlayerByPlayerNumber(@Param("roomId") UUID roomId, @Param("playerNumber") int playerNumber);
 }
 

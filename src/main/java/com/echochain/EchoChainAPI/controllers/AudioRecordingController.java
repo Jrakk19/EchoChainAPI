@@ -8,9 +8,11 @@ import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.util.IOUtils;
 
+import com.echochain.EchoChainAPI.data.DTO.RequestNextAudio;
 import com.echochain.EchoChainAPI.data.entities.AudioRecordingEntity;
 import com.echochain.EchoChainAPI.models.AudioRecordingModel;
 import com.echochain.EchoChainAPI.services.AudioRecordingService;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.InputStreamResource;
@@ -54,7 +56,7 @@ public class AudioRecordingController {
 
         recordings.forEach(recordingEntity -> {
             recordModels.add(new AudioRecordingModel(recordingEntity.getId(), recordingEntity.getPlayerId(),
-                    recordingEntity.getS3Key(), recordingEntity.getGameIndex(), recordingEntity.getRoomId()));
+                    recordingEntity.getS3Key(), recordingEntity.getGameIndex(), recordingEntity.getRoomId(), recordingEntity.getChainId()));
         });
 
         return recordModels;
@@ -70,7 +72,7 @@ public class AudioRecordingController {
         AudioRecordingEntity recordingEntity = service.findById(id);
 
         AudioRecordingModel recordingModel = new AudioRecordingModel(recordingEntity.getId(), recordingEntity.getPlayerId(),
-                recordingEntity.getS3Key(), recordingEntity.getGameIndex(), recordingEntity.getRoomId());
+                recordingEntity.getS3Key(), recordingEntity.getGameIndex(), recordingEntity.getRoomId(), recordingEntity.getChainId());
 
         return recordingModel;
     }
@@ -84,12 +86,13 @@ public class AudioRecordingController {
     public int uploadFile(@RequestParam("file")MultipartFile audioFile,
                           @RequestParam("playerId") UUID player_id,
                           @RequestParam("gameIndex") int gameIndex,
-                          @RequestParam("roomId") UUID roomId)  throws IOException {
+                          @RequestParam("roomId") UUID roomId,
+                          @RequestParam("chainId") UUID chainId)  throws IOException {
 
         System.out.println(player_id);
         System.out.println(gameIndex);
         UUID newS3Key = UUID.randomUUID();
-        AudioRecordingModel audioModel = new AudioRecordingModel(UUID.randomUUID(), player_id, newS3Key, gameIndex, roomId);
+        AudioRecordingModel audioModel = new AudioRecordingModel(UUID.randomUUID(), player_id, newS3Key, gameIndex, roomId, chainId);
 
         System.out.println(audioModel.getS3Key());
 
@@ -170,8 +173,41 @@ public class AudioRecordingController {
         AudioRecordingEntity recordingEntity = service.updateAudioRecording(recordingModel);
 
         AudioRecordingModel audioModel = new AudioRecordingModel(recordingEntity.getId(), recordingEntity.getPlayerId(),
-                recordingEntity.getS3Key(), recordingEntity.getGameIndex(), recordingEntity.getRoomId());
+                recordingEntity.getS3Key(), recordingEntity.getGameIndex(), recordingEntity.getRoomId(), recordingEntity.getChainId());
 
         return audioModel;
+    }
+
+    @GetMapping("/next-audio")
+    public void getNextAudio(@RequestParam("request") String requestJson){
+        Gson gson = new Gson();
+        RequestNextAudio request = gson.fromJson(requestJson, RequestNextAudio.class);
+
+
+        UUID recordingS3Key = service.findNextAudio(request.getGameIndex(), request.getPlayer());
+
+
+        System.out.println("We are here" + recordingS3Key);
+//        try{
+//            AmazonS3 amazonS3 = AmazonS3ClientBuilder
+//                    .standard()
+//                    .withRegion("us-west-1")
+//                    .build();
+//
+//            S3Object s3Object= amazonS3.getObject(awsConfig.getS3().getBucketName(), recordingS3Key.toString());
+//
+//            System.out.println(s3Object);
+//            InputStream audioStream = s3Object.getObjectContent();
+//
+//            System.out.println(audioStream.toString());
+//
+//            //HttpHeaders headers = new HttpHeaders();
+//            //headers.add("Content-Disposition", "attachment; filename=" + "testing_audio_M4A");
+//
+//            return new ResponseEntity<>(new InputStreamResource(audioStream), HttpStatus.OK);
+//        }catch(AmazonS3Exception e){
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+
     }
 }
