@@ -1,7 +1,7 @@
 package com.echochain.EchoChainAPI.controllers;
 
 import com.amazonaws.services.cognitoidp.model.UserType;
-import com.echochain.EchoChainAPI.Responses.BaseResponse;
+import com.echochain.EchoChainAPI.response.BaseResponse;
 import com.echochain.EchoChainAPI.data.DTO.LoginDTO;
 import com.echochain.EchoChainAPI.data.DTO.SignUpDTO;
 import com.echochain.EchoChainAPI.services.UserService;

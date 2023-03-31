@@ -5,28 +5,21 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.S3Object;
-import com.amazonaws.services.s3.model.S3ObjectInputStream;
-import com.amazonaws.util.IOUtils;
 
-import com.echochain.EchoChainAPI.data.DTO.RequestNextAudio;
+import com.echochain.EchoChainAPI.data.DTO.RequestNextStep;
 import com.echochain.EchoChainAPI.data.entities.AudioRecordingEntity;
 import com.echochain.EchoChainAPI.models.AudioRecordingModel;
 import com.echochain.EchoChainAPI.services.AudioRecordingService;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -181,7 +174,7 @@ public class AudioRecordingController {
     @GetMapping("/next-audio")
     public void getNextAudio(@RequestParam("request") String requestJson){
         Gson gson = new Gson();
-        RequestNextAudio request = gson.fromJson(requestJson, RequestNextAudio.class);
+        RequestNextStep request = gson.fromJson(requestJson, RequestNextStep.class);
 
 
         UUID recordingS3Key = service.findNextAudio(request.getGameIndex(), request.getPlayer());

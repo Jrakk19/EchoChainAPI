@@ -2,11 +2,11 @@ package com.echochain.EchoChainAPI.data.DTO;
 
 import com.echochain.EchoChainAPI.models.PlayerModel;
 
-public class RequestNextAudio {
+public class RequestNextStep {
     private int gameIndex;
     private PlayerModel player;
 
-    public RequestNextAudio(int gameIndex, PlayerModel player) {
+    public RequestNextStep(int gameIndex, PlayerModel player) {
         this.gameIndex = gameIndex;
         this.player = player;
     }

@@ -1,8 +1,10 @@
 package com.echochain.EchoChainAPI.controllers;
 
+import com.echochain.EchoChainAPI.data.DTO.RequestNextStep;
 import com.echochain.EchoChainAPI.data.entities.GuessEntity;
 import com.echochain.EchoChainAPI.models.GuessModel;
 import com.echochain.EchoChainAPI.services.GuessService;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -41,5 +43,13 @@ public class GuessController {
     @PostMapping("/create")
     public int makeGuess(@RequestBody GuessModel guess){
         return service.makeGuess(guess);
+    }
+
+    @GetMapping("/next-guess")
+    public GuessEntity getNextGuess(@RequestParam("request") String requestJson){
+        Gson gson = new Gson();
+        RequestNextStep request = gson.fromJson(requestJson, RequestNextStep.class);
+
+        return service.findNextGuess(request.getGameIndex(), request.getPlayer());
     }
 }

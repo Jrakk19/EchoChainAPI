@@ -1,4 +1,4 @@
-package com.echochain.EchoChainAPI.Responses;
+package com.echochain.EchoChainAPI.response;
 
 import java.io.Serializable;
 

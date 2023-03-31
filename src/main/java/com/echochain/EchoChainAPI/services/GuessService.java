@@ -1,8 +1,11 @@
 package com.echochain.EchoChainAPI.services;
 
+import com.echochain.EchoChainAPI.data.entities.AudioRecordingEntity;
 import com.echochain.EchoChainAPI.data.entities.GuessEntity;
 import com.echochain.EchoChainAPI.data.repository.GuessRepository;
+import com.echochain.EchoChainAPI.data.repository.PlayerRepository;
 import com.echochain.EchoChainAPI.models.GuessModel;
+import com.echochain.EchoChainAPI.models.PlayerModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +17,9 @@ public class GuessService {
 
     @Autowired
     private GuessRepository guessRepository;
+
+    @Autowired
+    private PlayerRepository playerRepository;
 
     public GuessEntity findById(UUID id){
 
@@ -37,6 +43,25 @@ public class GuessService {
         return 0;
     }
 
+    }
+
+    public GuessEntity findNextGuess(int gameIndex, PlayerModel player){
+
+        int playerCount = playerRepository.countPlayersInRoom(player.getGameId());
+
+        int nextPlayerNumber = (player.getPlayerNumber() - 1 + playerCount) % playerCount;
+
+        UUID targetPlayer = playerRepository.findPlayerByPlayerNumber(player.getGameId(), nextPlayerNumber);
+
+
+        try{
+            GuessEntity guessEntity = guessRepository.findNextGuess(gameIndex,targetPlayer );
+
+            return guessEntity;
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
 

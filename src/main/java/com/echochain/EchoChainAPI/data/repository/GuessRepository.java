@@ -10,4 +10,7 @@ import java.util.UUID;
 public interface GuessRepository extends CrudRepository<GuessEntity, UUID> {
     @Query("SELECT COUNT(*) FROM guesses WHERE guesses.game_index = :gameIndex AND guesses.room_id = :roomId")
     int countNumberOfGuessesForGameIndex(@Param("gameIndex") int gameIndex, @Param("roomId") UUID roomId);
+
+    @Query("SELECT * FROM guesses where guesses.player_id = :playerId AND guesses.game_index = :gameIndex")
+    GuessEntity findNextGuess(@Param("gameIndex") int gameIndex, @Param("playerId") UUID playerId);
 }
