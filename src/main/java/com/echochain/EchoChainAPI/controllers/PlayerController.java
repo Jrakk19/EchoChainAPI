@@ -13,6 +13,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/player")
+@CrossOrigin
 public class PlayerController {
 
     @Autowired

@@ -11,6 +11,8 @@ public class PromptModel {
 
     private UUID chainId;
 
+    private UUID playerId;
+
     public PromptModel(UUID id, String title, UUID roomId, int gameIndex, UUID chainId) {
         this.id = id;
         this.title = title;
@@ -19,14 +21,23 @@ public class PromptModel {
         this.chainId = chainId;
     }
 
-    public PromptModel(String title, UUID roomId, int gameIndex, UUID chainId) {
+    public PromptModel(String title, UUID roomId, int gameIndex, UUID chainId, UUID playerId) {
         this.title = title;
         this.roomId = roomId;
         this.gameIndex = gameIndex;
         this.chainId = chainId;
+        this.playerId = playerId;
     }
 
     public PromptModel() {
+    }
+
+    public UUID getPlayerId() {
+        return playerId;
+    }
+
+    public void setPlayerId(UUID playerId) {
+        this.playerId = playerId;
     }
 
     public UUID getChainId() {

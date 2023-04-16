@@ -19,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/prompts")
+@CrossOrigin
 public class PromptController {
 
     @Autowired
@@ -60,6 +61,7 @@ public class PromptController {
         int numberOfPrompts = chainService.countPromptsForGameIndex(prompt.getGameIndex(), prompt.getRoomId());
         System.out.println("THIS IS THE NUMBER" + numberOfPrompts);
 
+        System.out.println("here is the chain id" + chainEntity.getId());
         int numberOfPlayers = chainService.countNumberOfPlayersInRoom(prompt.getRoomId());
         System.out.println("HERE NUMBER OF PLAYERS" + numberOfPlayers);
 
@@ -69,7 +71,7 @@ public class PromptController {
             System.out.println("WE MADE IT HERE ");
             pusher.setCluster("us3");
             pusher.setEncrypted(true);
-            pusher.trigger(roomEntity.getCode().toString(), "guess", Collections.singletonMap("message", "Hello World"));
+            pusher.trigger(roomEntity.getCode().toString(), "record", Collections.singletonMap("message", "Hello World"));
         }
 
 

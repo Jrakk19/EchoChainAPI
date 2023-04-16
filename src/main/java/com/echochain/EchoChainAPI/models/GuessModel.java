@@ -5,18 +5,46 @@ import java.util.UUID;
 public class GuessModel {
 
     private UUID id;
-    private UUID gameId;
+
+    private String title;
     private UUID roomId;
     private int gameIndex;
 
     private UUID chainId;
 
-    public GuessModel(UUID id, UUID gameId, UUID roomId, int gameIndex, UUID chainId) {
+    private UUID playerId;
+
+    public GuessModel(UUID id, UUID roomId, int gameIndex, UUID chainId, String title, UUID playerId) {
         this.id = id;
-        this.gameId = gameId;
         this.roomId = roomId;
         this.gameIndex = gameIndex;
         this.chainId = chainId;
+        this.title = title;
+        this.playerId = playerId;
+    }
+
+    public GuessModel(String title, UUID roomId, int gameIndex, UUID chainId, UUID playerId) {
+        this.title = title;
+        this.roomId = roomId;
+        this.gameIndex = gameIndex;
+        this.chainId = chainId;
+        this.playerId = playerId;
+    }
+
+    public UUID getPlayerId() {
+        return playerId;
+    }
+
+    public void setPlayerId(UUID playerId) {
+        this.playerId = playerId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public GuessModel() {
@@ -38,13 +66,6 @@ public class GuessModel {
         this.id = id;
     }
 
-    public UUID getGameId() {
-        return gameId;
-    }
-
-    public void setGameId(UUID gameId) {
-        this.gameId = gameId;
-    }
 
     public UUID getRoomId() {
         return roomId;

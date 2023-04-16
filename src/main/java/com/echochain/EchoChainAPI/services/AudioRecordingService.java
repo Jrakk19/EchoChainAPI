@@ -50,7 +50,7 @@ public class AudioRecordingService {
     public int createRecordingInS3Bucket(AudioRecordingModel audioRecordingModel) {
 
         AudioRecordingEntity recordingEntity = new AudioRecordingEntity(audioRecordingModel.getPlayerId(),
-                audioRecordingModel.getS3Key(), audioRecordingModel.getGameIndex(), audioRecordingModel.getRoomId());
+                audioRecordingModel.getS3Key(), audioRecordingModel.getGameIndex(), audioRecordingModel.getRoomId(), audioRecordingModel.getChainId());
 
         try{
             audioRecordingRepository.save(recordingEntity);
@@ -79,19 +79,29 @@ public class AudioRecordingService {
         return audioRecordingRepository.save(recordingEntity);
     }
 
-    public UUID findNextAudio(int gameIndex, PlayerModel player){
+    public AudioRecordingEntity findNextAudio(int gameIndex, PlayerModel player){
 
         int playerCount = playerRepository.countPlayersInRoom(player.getGameId());
 
-        int nextPlayerNumber = (player.getPlayerNumber() - 1 + playerCount) % playerCount;
+        int nextPlayerNumber;
 
+        System.out.println("THIS SI THE PLAYER COUNT AUDIO" + playerCount);
+        System.out.println("THIS IS THE PLAYER NUMBER AUDIO" + player.getPlayerNumber());
+        if(player.getPlayerNumber() == 0){
+            nextPlayerNumber = playerCount - 1;
+            System.out.println("THIS IS THE NEXT PLAYER NUMBER AUDIO" + nextPlayerNumber);
+        }else{
+            nextPlayerNumber = player.getPlayerNumber() - 1;
+            System.out.println("THIS IS THE NEXT PLAYER NUMBER AUDIO" + nextPlayerNumber);
+        }
         UUID targetPlayer = playerRepository.findPlayerByPlayerNumber(player.getGameId(), nextPlayerNumber);
 
+        System.out.println("THIS IS THE TARGET PLAYER" + targetPlayer);
 
         try{
             AudioRecordingEntity audioRecordingEntity = audioRecordingRepository.findNextAudio(gameIndex,targetPlayer );
 
-            return audioRecordingEntity.getS3Key();
+            return audioRecordingEntity;
         }catch(Exception e){
             e.printStackTrace();
             return null;

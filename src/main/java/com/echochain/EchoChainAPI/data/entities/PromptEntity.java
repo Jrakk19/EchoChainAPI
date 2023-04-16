@@ -23,6 +23,8 @@ public class PromptEntity {
 
     @Column("chain_id")
     private UUID chainId;
+    @Column("player_id")
+    private UUID playerId;
 
     public PromptEntity(UUID id, String title, UUID roomId, int gameIndex, UUID chainId) {
         this.id = id;
@@ -32,14 +34,23 @@ public class PromptEntity {
         this.chainId = chainId;
     }
 
-    public PromptEntity(String title, UUID roomId, int gameIndex, UUID chainId) {
+    public PromptEntity(String title, UUID roomId, int gameIndex, UUID chainId, UUID playerId) {
         this.title = title;
         this.roomId = roomId;
         this.gameIndex = gameIndex;
         this.chainId = chainId;
+        this.playerId = playerId;
     }
 
     public PromptEntity() {
+    }
+
+    public UUID getPlayerId() {
+        return playerId;
+    }
+
+    public void setPlayerId(UUID playerId) {
+        this.playerId = playerId;
     }
 
     public UUID getChainId() {
@@ -81,5 +92,7 @@ public class PromptEntity {
     public void setTitle(String title) {
         this.title = title;
     }
+
+
 
 }

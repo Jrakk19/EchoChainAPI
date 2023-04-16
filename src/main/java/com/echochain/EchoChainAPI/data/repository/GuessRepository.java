@@ -5,6 +5,7 @@ import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface GuessRepository extends CrudRepository<GuessEntity, UUID> {
@@ -13,4 +14,7 @@ public interface GuessRepository extends CrudRepository<GuessEntity, UUID> {
 
     @Query("SELECT * FROM guesses where guesses.player_id = :playerId AND guesses.game_index = :gameIndex")
     GuessEntity findNextGuess(@Param("gameIndex") int gameIndex, @Param("playerId") UUID playerId);
+    @Query("SELECT * FROM guesses where guesses.chain_id = :chainId")
+    List<GuessEntity> findGuessesByChainId(@Param("chainId") UUID chainId);
+
 }

@@ -15,8 +15,8 @@ public class GuessEntity {
     @Id
     private UUID id;
 
-    @Column("game_id")
-    private UUID gameId;
+    @Column("title")
+    private String title;
 
     @Column("room_id")
     private UUID roomId;
@@ -27,15 +27,27 @@ public class GuessEntity {
     @Column("chain_id")
     private UUID chainId;
 
-    public GuessEntity(UUID id, UUID gameId, UUID roomId, int gameIndex, UUID chainId) {
+    @Column("player_id")
+    private UUID playerId;
+
+    public GuessEntity(UUID id,UUID roomId, int gameIndex, UUID chainId, String title, UUID playerId) {
         this.id = id;
-        this.gameId = gameId;
         this.roomId = roomId;
         this.gameIndex = gameIndex;
         this.chainId = chainId;
+        this.title = title;
+        this.playerId = playerId;
     }
 
     public GuessEntity() {
+    }
+
+    public UUID getPlayerId() {
+        return playerId;
+    }
+
+    public void setPlayerId(UUID playerId) {
+        this.playerId = playerId;
     }
 
     public UUID getChainId() {
@@ -46,6 +58,14 @@ public class GuessEntity {
         this.chainId = chainId;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public UUID getId() {
         return id;
     }
@@ -54,13 +74,6 @@ public class GuessEntity {
         this.id = id;
     }
 
-    public UUID getGameId() {
-        return gameId;
-    }
-
-    public void setGameId(UUID gameId) {
-        this.gameId = gameId;
-    }
 
     public UUID getRoomId() {
         return roomId;

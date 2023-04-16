@@ -37,7 +37,7 @@ public class AudioRecordingEntity {
         this.chainId = chainId;
     }
 
-    public AudioRecordingEntity(UUID playerId, UUID s3Key, int gameIndex, UUID roomId) {
+    public AudioRecordingEntity(UUID playerId, UUID s3Key, int gameIndex, UUID roomId, UUID chainId) {
         this.playerId = playerId;
         this.s3Key = s3Key;
         this.gameIndex = gameIndex;

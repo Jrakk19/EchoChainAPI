@@ -10,10 +10,21 @@ public class CreatePromptRequest {
     private UUID roomId;
     private int gameIndex;
 
-    public CreatePromptRequest(String title, UUID roomId, int gameIndex) {
+    private UUID playerId;
+
+    public CreatePromptRequest(String title, UUID roomId, int gameIndex, UUID playerId) {
         this.title = title;
         this.roomId = roomId;
         this.gameIndex = gameIndex;
+        this.playerId = playerId;
+    }
+
+    public UUID getPlayerId() {
+        return playerId;
+    }
+
+    public void setPlayerId(UUID playerId) {
+        this.playerId = playerId;
     }
 
     public String getTitle() {
@@ -41,7 +52,7 @@ public class CreatePromptRequest {
     }
 
     public PromptModel requestToModel(CreatePromptRequest prompt, UUID chainId){
-        PromptModel promptModel = new PromptModel(prompt.getTitle(), prompt.getRoomId(), prompt.getGameIndex(), chainId);
+        PromptModel promptModel = new PromptModel(prompt.getTitle(), prompt.getRoomId(), prompt.getGameIndex(), chainId, prompt.getPlayerId());
         return promptModel;
     }
 }

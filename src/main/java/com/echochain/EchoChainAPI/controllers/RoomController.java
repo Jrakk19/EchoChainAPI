@@ -1,12 +1,16 @@
 package com.echochain.EchoChainAPI.controllers;
 
 import com.echochain.EchoChainAPI.configurations.AWSConfig;
+import com.echochain.EchoChainAPI.data.DTO.ChainDTO;
+import com.echochain.EchoChainAPI.data.DTO.RequestChain;
 import com.echochain.EchoChainAPI.data.entities.PlayerEntity;
 import com.echochain.EchoChainAPI.data.entities.RoomEntity;
 import com.echochain.EchoChainAPI.models.PlayerModel;
 import com.echochain.EchoChainAPI.models.RoomModel;
+import com.echochain.EchoChainAPI.services.ChainService;
 import com.echochain.EchoChainAPI.services.PlayerService;
 import com.echochain.EchoChainAPI.services.RoomService;
+import com.google.gson.Gson;
 import com.pusher.rest.Pusher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +23,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/room")
+@CrossOrigin
 public class RoomController {
 
     @Autowired
@@ -28,6 +33,10 @@ public class RoomController {
 
     @Autowired
     PlayerService playerService;
+
+    @Autowired
+    ChainService chainService;
+
 
     Pusher pusher = new Pusher("1538175", "d2348725df402f73b423", "74464c794ccc28926f11");
 
@@ -129,6 +138,17 @@ public class RoomController {
         System.out.println("IN GET ROOM" + roomCode);
         return service.findByRoomCode(roomCode);
     }
+
+    @GetMapping("/get-chain")
+    public ChainDTO getChain(@RequestParam("request") String requestJson){
+        Gson gson = new Gson();
+
+        RequestChain request = gson.fromJson(requestJson, RequestChain.class);
+
+        ChainDTO chainDTO = chainService.getFullChain(request.getRoomId(), request.getPlayerNumber());
+
+        return chainDTO;
+    }
     private String generateRoomCode(){
         final String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         Random rng = new Random();
@@ -139,4 +159,6 @@ public class RoomController {
         return new String(text);
 
     }
+
+
 }

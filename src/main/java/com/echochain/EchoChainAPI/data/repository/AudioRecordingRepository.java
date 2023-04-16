@@ -15,4 +15,7 @@ public interface AudioRecordingRepository extends CrudRepository<AudioRecordingE
 
     @Query("SELECT * FROM audio_recordings where audio_recordings.player_id = :playerId AND audio_recordings.game_index = :gameIndex")
     AudioRecordingEntity findNextAudio(@Param("gameIndex") int gameIndex, @Param("playerId") UUID playerId);
+
+    @Query("SELECT * FROM audio_recordings where audio_recordings.chain_id = :chainId")
+    List<AudioRecordingEntity> findByChainId(@Param("chainId") UUID chainId);
 }

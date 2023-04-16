@@ -1,10 +1,12 @@
 package com.echochain.EchoChainAPI.services;
 
-import com.echochain.EchoChainAPI.data.entities.ChainEntity;
+import com.echochain.EchoChainAPI.data.DTO.ChainDTO;
+import com.echochain.EchoChainAPI.data.entities.*;
 import com.echochain.EchoChainAPI.data.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -51,6 +53,15 @@ public class ChainService {
         }
     }
 
+    public int countGuessesForGameIndex(int gameIndex, UUID roomId){
+        try{
+            return guessRepository.countNumberOfGuessesForGameIndex(gameIndex, roomId);
+        }catch(Exception e){
+            e.printStackTrace();
+            return 1000;
+        }
+    }
+
     public int countNumberOfRecordingsForGameIndex(int gameIndex, UUID roomId){
         try{
             return audioRecordingRepository.countNumberOfRecordingsForGameIndex(gameIndex, roomId);
@@ -67,5 +78,19 @@ public class ChainService {
             e.printStackTrace();
             return 1000;
         }
+
+    }
+
+    public ChainDTO getFullChain(UUID roomId, int playerNumber){
+
+        UUID playerId = playerRepository.findPlayerByPlayerNumber(roomId, playerNumber);
+        PromptEntity prompt = promptRepository.findByPlayerId(playerId);
+
+        List<GuessEntity> guessList = guessRepository.findGuessesByChainId(prompt.getChainId());
+        List<AudioRecordingEntity> audioList = audioRecordingRepository.findByChainId(prompt.getChainId());
+
+        ChainDTO chainDTO = new ChainDTO(prompt.getTitle(), audioList, guessList);
+
+        return chainDTO;
     }
 }

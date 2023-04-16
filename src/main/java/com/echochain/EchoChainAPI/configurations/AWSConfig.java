@@ -65,6 +65,13 @@ public class AWSConfig {
         public void setBucketName(String bucketName) {
             this.bucketName = bucketName;
         }
+
+        @Override
+        public String toString() {
+            return "S3{" +
+                    "bucketName='" + bucketName + '\'' +
+                    '}';
+        }
     }
     public static class Cognito {
         public String getUserPoolId() {
