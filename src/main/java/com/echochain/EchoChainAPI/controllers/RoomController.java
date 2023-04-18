@@ -149,6 +149,21 @@ public class RoomController {
 
         return chainDTO;
     }
+
+    @DeleteMapping("/leave-room/{playerId}")
+    public void leaveRoom(@PathVariable("playerId") UUID playerId){
+        PlayerEntity playerEntity = playerService.findById(playerId);
+
+        playerService.deletePlayer(playerId);
+
+        int numberOfPlayers = chainService.countNumberOfPlayersInRoom(playerEntity.getGameId());
+
+        if(numberOfPlayers == 0){
+            System.out.println("We are deleting the room" + playerEntity.getGameId().toString());
+            service.deleteRoom(playerEntity.getGameId());
+        }
+
+    }
     private String generateRoomCode(){
         final String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         Random rng = new Random();
@@ -159,6 +174,8 @@ public class RoomController {
         return new String(text);
 
     }
+
+
 
 
 }
