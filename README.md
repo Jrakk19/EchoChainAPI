@@ -153,21 +153,24 @@
 
 >	On my loading page I used Pusher in order to listen for an event message that would tell the game where to go. This can be seen in the diagram below 
 
- 
+![loading](https://user-images.githubusercontent.com/59484187/235290997-31a6fd09-a033-4344-9eb0-1b8fb6c29476.png)
+
 
 >	The flow of the game is shown in the following diagram. 
 
-	 
- 
+
+ ![flow](https://user-images.githubusercontent.com/59484187/235291265-8b1b7d5e-6954-40a4-b386-4a29bc182dc5.png)
+
 
 >	In my API I follow a Controller -> Service -> Repository like structure. Controllers would handle the requests while the service handles most of if not all of the logic and the repository handles all database queries. A diagram of my API and the previously mentioned flow can be seen below. 
 
-	 
- 
+![logical system design (1)](https://user-images.githubusercontent.com/59484187/235291190-c78526cc-e48c-48f3-a983-5757c7bf7405.jpg)
+![apiflow](https://user-images.githubusercontent.com/59484187/235291227-2101efc4-8d86-42a5-902a-87aab2a73900.png)
+
 
 >	The chain functionality is a combination of most of the functionality in my application and the retrieval of a full chain object was the biggest area in the project when it comes to a single entity being retrieved from the Back-End. The process for this can be seen below.  
 
-	 
+![Screenshot 2023-04-29 003907](https://user-images.githubusercontent.com/59484187/235290241-16a7964d-bea4-4395-9e90-265d61f7e2f1.png)
 
  
 
